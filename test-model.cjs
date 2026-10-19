@@ -5,3 +5,5 @@ s=new Experiment();s.step(.4);s.press(Infinity);s.step(2);assert.equal(s.poll.hi
 s=new Experiment(.1);s.step(.4);s.press(.2);s.step(.3);assert.equal(s.poll.hits,1);assert.equal(s.irq.hits,1);
 s=new Experiment();s.step(.4);s.press(.2);s.tick();const saved={...s.irq.stack};s.step(.1);assert.equal(s.irq.phase,saved.phase);assert.ok(Math.abs(s.irq.remaining-saved.remaining)<1e-6);assert.equal(s.irq.stack,null);s.step(1.2);assert.ok(s.t>s.irq.lampUntil);
 console.log('Modell geprüft: 4-s-Signal, verpasster kurzer Impuls, langer Tastendruck, schnelles Polling, Flankenerkennung, ISR-Rückkehr und Nachleuchtdauer.');
+
+s=new Experiment();s.press(Infinity);s.tick();s.release();s.press(.2);s.step(.3);assert.equal(s.irq.hits,2);console.log("Weiteres Ereignis während ISR bleibt bis zur Rückkehr vorgemerkt.");
